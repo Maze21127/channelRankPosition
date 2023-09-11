@@ -70,7 +70,7 @@ async def get_stats():
                         is_bold = True
 
             message += "\n".join(map(str, sorted(indexes))) if is_exists else "🆘 -"
-            messages.append(f"✅ <b>{query}</b>\n{message}\n" if is_bold else f"✅ {query}\n{message}\n")
+            messages.append(f"✅ <b>{query.capitalize()}</b>\n{message}\n" if is_bold else f"✅ {query.capitalize()}\n{message}\n")
 
             print(f'Finished with "{query}"')
             await asyncio.sleep(2)
