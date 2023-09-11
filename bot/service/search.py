@@ -51,6 +51,9 @@ async def get_stats():
     app = Client("Rank Checking", api_id=API_ID, api_hash=API_HASH)
     messages = []
     async with app:
+        async for chat in app.get_dialogs():
+            print(chat.chat.id, chat.chat.title)
+        return
         for query in query_strings:
             message = ""
             is_exists = False
