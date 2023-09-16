@@ -18,4 +18,6 @@ async def search(message: types.Message):
     if message.chat.id != RESULT_CHAT_ID:
         return
     await message.answer("Запущено сканирование, вы получите отчет в течении нескольких минут.")
-    return await get_stats()
+    messages = await get_stats()
+    for msg in messages:
+        await message.answer(text=msg, parse_mode=types.ParseMode.HTML)

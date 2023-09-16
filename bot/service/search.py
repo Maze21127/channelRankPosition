@@ -51,6 +51,7 @@ async def get_stats():
     query_strings = get_query_strings('string_query.txt')
 
     messages = []
+    result_messages = []
     for query in query_strings:
         message = ""
         is_exists = False
@@ -73,10 +74,12 @@ async def get_stats():
     result_message = ""
     for msg in messages:
         if len(result_message + msg) > 3500:
+            result_messages.append(result_message)
             await app.send_message(chat_id=RESULT_CHAT_ID, text=result_message,
                                    parse_mode=ParseMode.MARKDOWN)
             result_message = ""
         else:
             result_message += msg
-    await app.send_message(chat_id=RESULT_CHAT_ID, text=result_message,
-                           parse_mode=ParseMode.HTML)
+    result_messages.append(result_message)
+    return result_message
+
