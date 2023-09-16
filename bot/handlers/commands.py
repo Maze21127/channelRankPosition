@@ -21,3 +21,13 @@ async def search(message: types.Message):
     messages = await get_stats()
     for msg in messages:
         await message.answer(text=msg, parse_mode=types.ParseMode.HTML)
+
+
+@dp.message_handler(Command("test"), chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
+async def test_search(message: types.Message):
+    if message.chat.id != RESULT_CHAT_ID:
+        return
+    await message.answer("Запущено тестовое сканирование, вы получите отчет в течении нескольких минут.")
+    messages = await get_stats(test=True)
+    for msg in messages:
+        await message.answer(text=msg, parse_mode=types.ParseMode.HTML)

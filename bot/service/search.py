@@ -47,9 +47,10 @@ async def get_chats(query: str, app: Client):
     return list(searched_chats)
 
 
-async def get_stats():
+async def get_stats(test: bool = False):
     query_strings = get_query_strings('string_query.txt')
-
+    if test:
+        query_strings = query_strings[:3]
     messages = []
     result_messages = []
     for query in query_strings:
