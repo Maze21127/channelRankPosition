@@ -80,6 +80,7 @@ async def get_stats():
             result_message = ""
         else:
             result_message += msg
-    result_messages.append(result_message)
+    if len(result_message) > 0:
+        result_messages.append(result_message)
     return result_message
 
