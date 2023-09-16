@@ -75,9 +75,7 @@ async def get_stats(test: bool = False):
     result_message = ""
     for msg in messages:
         if len(result_message + msg) > 3500:
-            result_messages.append(result_message)
-            await app.send_message(chat_id=RESULT_CHAT_ID, text=result_message,
-                                   parse_mode=ParseMode.MARKDOWN)
+            result_messages.append(result_message[::])
             result_message = ""
         else:
             result_message += msg
