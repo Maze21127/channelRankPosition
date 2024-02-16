@@ -7,7 +7,7 @@ from pyrogram.raw.types import InputPeerChannel
 
 from bot.loader import app
 from settings import LAST_MESSAGE_CONTAINS, RESULT_CHAT_ID
-
+from logger import logger
 
 def get_query_strings(filename: str) -> list[str]:
     with open(filename, 'r', encoding='utf-8') as file:
@@ -58,16 +58,24 @@ async def get_stats(test: bool = False):
         is_exists = False
         indexes = []
         chats = await get_chats(query, app)
+        logger.debug(f"Searching for {query} got {len(chats)} chats")
         is_bold = False
+
         for index, chat in enumerate(chats):
             last_message = await fetch_last_message(chat.id, access_hash=chat.access_hash, app=app)
             if last_message is None:
+                logger.debug(f"Channel: {chat.username} has not message")
                 continue
             if LAST_MESSAGE_CONTAINS in last_message:
+                logger.debug(f"Channel: {chat.username} added ")
                 is_exists = True if not is_exists else True
                 indexes.append(index + 1)
                 if index <= 2:
                     is_bold = True
+            else:
+                logger.debug(
+                    f"LAST MESSAGE:\n{last_message} not contains"
+                    f" {LAST_MESSAGE_CONTAINS}")
         message += "\n".join(map(str, sorted(indexes))) if is_exists else "🆘 -"
         messages.append(f"✅ <b>{query.capitalize()}</b>\n{message}\n" if is_bold else f"✅ {query.capitalize()}\n{message}\n")
         print(f'Finished with "{query}"')
