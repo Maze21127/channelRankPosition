@@ -78,7 +78,7 @@ async def get_stats(test: bool = False):
                     f" {LAST_MESSAGE_CONTAINS}")
         message += "\n".join(map(str, sorted(indexes))) if is_exists else "🆘 -"
         messages.append(f"✅ <b>{query.capitalize()}</b>\n{message}\n" if is_bold else f"✅ {query.capitalize()}\n{message}\n")
-        print(f'Finished with "{query}"')
+        logger.info(f'Finished with "{query}"')
         await asyncio.sleep(2)
     result_message = ""
     for msg in messages:
