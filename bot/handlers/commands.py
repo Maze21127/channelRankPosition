@@ -8,8 +8,7 @@ from settings import RESULT_CHAT_ID, ADDITIONAL_RESULT_CHAT_ID
 
 @dp.message_handler(CommandStart(), chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
 async def start_user(message: types.Message):
-    if message.chat.id not in [RESULT_CHAT_ID, ADDITIONAL_RESULT_CHAT_ID]:
-        print(f"Wrong chat: {message.chat.id}")
+    if message.chat.id != RESULT_CHAT_ID:
         return
     await message.answer("Статистика по местам в поиске доступна по команде /search")
 
