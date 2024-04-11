@@ -20,6 +20,7 @@ async def search(message: types.Message):
     elif message.chat.id == RESULT_CHAT_ID:
         with_additional = False
     else:
+        print(f"Wrong chat: {message.chat.id}")
         return
     await message.answer("Запущено сканирование, вы получите отчет в течении нескольких минут.")
     messages = await get_stats(with_additional_signs=with_additional)
@@ -34,6 +35,7 @@ async def test_search(message: types.Message):
     elif message.chat.id == RESULT_CHAT_ID:
         with_additional = False
     else:
+        print(f"Wrong chat: {message.chat.id}")
         return
     await message.answer("Запущено тестовое сканирование, вы получите отчет в течении нескольких минут.")
     messages = await get_stats(test=True, with_additional_signs=with_additional)
