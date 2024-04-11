@@ -1,7 +1,7 @@
 from aiogram import executor, Dispatcher, types
 
 from bot.loader import dp, scheduler, app, bot
-from bot.schedule import send_stats
+from bot.schedule import send_stats, send_stats_additional
 
 
 async def on_startup(dispatcher: Dispatcher):
@@ -15,6 +15,12 @@ async def on_startup(dispatcher: Dispatcher):
     times = ("10", "14", "18", "21")
     for time in times:
         scheduler.add_job(send_stats, args=[bot], trigger='cron', hour=time)
+
+    additional_times = ("9", "14", "19", "21")
+    for time in additional_times:
+        scheduler.add_job(
+            send_stats_additional, args=[bot], trigger='cron', hour=time
+        )
 
     scheduler.start()
     print("Jobs added")
