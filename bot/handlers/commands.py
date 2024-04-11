@@ -3,7 +3,7 @@ from aiogram.dispatcher.filters import CommandStart, Command
 
 from bot.loader import dp
 from bot.service.search import get_stats
-from settings import RESULT_CHAT_ID, ADDITIONAL_RESULT_CHAT_ID
+from settings import RESULT_CHAT_ID
 
 
 @dp.message_handler(CommandStart(), chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
@@ -15,27 +15,19 @@ async def start_user(message: types.Message):
 
 @dp.message_handler(Command("search"), chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
 async def search(message: types.Message):
-    if message.chat.id == ADDITIONAL_RESULT_CHAT_ID:
-        with_additional = True
-    elif message.chat.id == RESULT_CHAT_ID:
-        with_additional = False
-    else:
+    if message.chat.id != RESULT_CHAT_ID:
         return
     await message.answer("Запущено сканирование, вы получите отчет в течении нескольких минут.")
-    messages = await get_stats(with_additional_signs=with_additional)
+    messages = await get_stats()
     for msg in messages:
         await message.answer(text=msg, parse_mode=types.ParseMode.HTML)
 
 
 @dp.message_handler(Command("test"), chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
 async def test_search(message: types.Message):
-    if message.chat.id == ADDITIONAL_RESULT_CHAT_ID:
-        with_additional = True
-    elif message.chat.id == RESULT_CHAT_ID:
-        with_additional = False
-    else:
+    if message.chat.id != RESULT_CHAT_ID:
         return
     await message.answer("Запущено тестовое сканирование, вы получите отчет в течении нескольких минут.")
-    messages = await get_stats(test=True, with_additional_signs=with_additional)
+    messages = await get_stats(test=True)
     for msg in messages:
         await message.answer(text=msg, parse_mode=types.ParseMode.HTML)
