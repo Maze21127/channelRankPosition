@@ -6,12 +6,21 @@ from pyrogram.raw import functions, types
 from pyrogram.raw.types import InputPeerChannel
 
 from bot.loader import app
-from settings import LAST_MESSAGE_CONTAINS, RESULT_CHAT_ID
+from settings import LAST_MESSAGE_CONTAINS
 from logger import logger
 
+
 def get_query_strings(filename: str) -> list[str]:
+    exists = set()
+    result = list()
     with open(filename, 'r', encoding='utf-8') as file:
-        return [i.strip() for i in file.readlines()]
+        lines = [i.strip() for i in file.readlines()]
+    for i in lines:
+        if i not in exists:
+            exists.add(i)
+            result.append(i)
+    return result
+
 
 
 async def fetch_last_message(chat_id: int, access_hash: int, app: Client) -> str | None:
