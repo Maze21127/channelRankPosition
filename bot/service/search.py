@@ -2,6 +2,7 @@ import asyncio
 
 from pyrogram import Client
 from pyrogram.enums import ParseMode
+from pyrogram.errors import ChannelPrivate
 from pyrogram.raw import functions, types
 from pyrogram.raw.types import InputPeerChannel
 
@@ -24,16 +25,20 @@ def get_query_strings(filename: str) -> list[str]:
 
 
 async def fetch_last_message(chat_id: int, access_hash: int, app: Client) -> str | None:
-    result: types.messages.channel_messages.ChannelMessages = await app.invoke(functions.messages.GetHistory(
-        peer=InputPeerChannel(channel_id=chat_id, access_hash=access_hash),
-        limit=1,
-        offset_id=0,
-        offset_date=-1,
-        add_offset=0,
-        max_id=0,
-        min_id=0,
-        hash=0
-    ))
+    try:
+        result: types.messages.channel_messages.ChannelMessages = await app.invoke(functions.messages.GetHistory(
+            peer=InputPeerChannel(channel_id=chat_id, access_hash=access_hash),
+            limit=1,
+            offset_id=0,
+            offset_date=-1,
+            add_offset=0,
+            max_id=0,
+            min_id=0,
+            hash=0
+        ))
+    except ChannelPrivate:
+        return None
+
     messages = result.messages
     if not messages:
         return None
